@@ -73,7 +73,11 @@ namespace PA7_Draft
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (string file in files)
+            {
                 this.SortMachine.WaitingQueue.Add(file);
+                SortMachine.LoadSortAndSave(file); //test
+            }
+               
         }
 
 
