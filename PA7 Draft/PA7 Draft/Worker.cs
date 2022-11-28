@@ -114,6 +114,7 @@ namespace PA7_Draft
         }
         internal bool LoadSortAndSave(string file)
         {
+            
             WorkingSet[file].AsyncWorker.ReportProgress(0, file); //error here...
             WorkingSet[file].LoadFile();
             WorkingSet[file].Sort();

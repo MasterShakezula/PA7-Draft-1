@@ -82,18 +82,23 @@ namespace PA7_Draft
 
 
         private void BackGroundWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
+        { //loads, sorts, and stores.
   
         }
 
         private void BackGroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            
  
         }
 
         private void BackGroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            
+            //implement
+            //find a new task for the worker. Take undone tasks, and when a worker finishes its tasks, assign the backgroundworker to a new task.
+            //there should never be a background worker doing nothing.
+            // do this until the file queue is empty
+
         }
     }
 }
