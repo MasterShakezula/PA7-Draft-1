@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace PA7_Draft
 {
-    class SortingTask {
+    class SortingTask { //important
         string FileName;
         int Progress;
         internal BackgroundWorker AsyncWorker;
@@ -85,19 +85,27 @@ namespace PA7_Draft
         }
         internal void LoadFile()
         {
+            //reports progress
             AsyncWorker.ReportProgress(0, "Loading " + FileName);
-            string text = File.ReadAllText(FileName);
-            RawData = Regex.Split(text, @"\W+");
+            //report progress triggers a progress event of the asyncbackground worker
+            //tells us we are loading
+            string text = File.ReadAllText(FileName); //unloads the data into main memory
+            RawData = Regex.Split(text, @"\W+"); // string array of rawfile data
+            //0 elements = 0 comparisons
             EstimatedComparisons = (RawData.Length == 0) ? 0 : RawData.Length * Math.Log(RawData.Length, 2);
         }
         internal void Sort()
         {
            Quick_Sort(RawData,0,RawData.Length-1);
+
         }
         internal void SaveFile(string fileName)
         {
             AsyncWorker.ReportProgress(100, "Saving " + FileName);
-            StreamWriter W = new StreamWriter(fileName);
+            //announces that the file is being saved. we can also report saving progress here 
+            //if we want, similar to LoadFile. Don't have to though.
+            StreamWriter W = new StreamWriter(fileName); //used to write in a file
+            //for reading you can just say file.readalltext.
             foreach(string s in RawData)
                 W.WriteLine(s);
             W.Close();
@@ -106,16 +114,19 @@ namespace PA7_Draft
     class Worker: INotifyPropertyChanged
     {
         internal BindingList<string> WaitingQueue;
-        internal ConcurrentDictionary<string,SortingTask> WorkingSet;
+        internal ConcurrentDictionary<string,SortingTask> WorkingSet; //thread safe similar to a hashmap
+        //sorting task does everything to help us track the task like data and progress progression, background worker(s), etc.
         internal Worker()
         {
             WaitingQueue = new BindingList<string>();
-            WorkingSet = new ConcurrentDictionary<string, SortingTask>();
+            WorkingSet = new ConcurrentDictionary<string, SortingTask>(); //important. Intialized. Thread safe.
         }
         internal bool LoadSortAndSave(string file)
         {
             
             WorkingSet[file].AsyncWorker.ReportProgress(0, file); //error here...
+            // it assumes workset is already populated, but its not. fix that.Before running all this.
+            //this SHOULD be working now. I hope.
             WorkingSet[file].LoadFile();
             WorkingSet[file].Sort();
             WorkingSet[file].SaveFile(file);
